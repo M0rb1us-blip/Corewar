@@ -1,0 +1,29 @@
+/*
+** EPITECH PROJECT, 2021
+** corewar [WSL: Ubuntu-20.04]
+** File description:
+** ldi
+*/
+
+#include "../../include/struct.h"
+
+bool ldi(proc_t ***procs, int i)
+{
+    int index_1 = get_value_from_instruct((*procs)[i], 0);
+    int index_2 = get_value_from_instruct((*procs)[i], 1);
+    int sum = 0;
+    int reg = (*procs)[i]->instruction->args[2] - 1;
+
+    if ((*procs)[i]->instruction->description[0] == 3) {
+        index_1 = index_1 % IDX_MOD - (*procs)[i]->instruction->size;
+        index_1 = get_nb_from_mem((*procs)[i]->pc, IND_SIZE, index_1);
+    }
+    sum = (index_1 + index_2) % IDX_MOD - (*procs)[i]->instruction->size;
+    (*procs)[i]->registers[reg] = \
+    get_nb_from_mem((*procs)[i]->pc, REG_SIZE, sum);
+    if (!(*procs)[i]->registers[reg])
+        (*procs)[i]->carry = 1;
+    else
+        (*procs)[i]->carry = 0;
+    return (true);
+}

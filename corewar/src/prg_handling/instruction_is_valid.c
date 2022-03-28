@@ -1,0 +1,33 @@
+/*
+** EPITECH PROJECT, 2021
+** corewar [WSL: Ubuntu-20.04]
+** File description:
+** instruction_is_valid
+*/
+
+#include "../../include/struct.h"
+
+bool instruction_is_valid(instruction_t *instruction)
+{
+    op_t op = {0};
+    int expected = 0;
+    int args = my_strlen(instruction->description);
+
+    for (int i = 0; op_tab[i].code; i++)
+        if (instruction->code == op_tab[i].code)
+            op = op_tab[i];
+    if (!op.code)
+        return (false);
+    for (; expected < 4 && op.type[expected]; expected++);
+    if (args != expected)
+        return (false);
+    for (int j = 0; j < args; j++) {
+        if (instruction->description[j] == 1 && !(op.type[j] & T_REG))
+            return (false);
+        if (instruction->description[j] == 2 && !(op.type[j] & T_DIR))
+            return (false);
+        if (instruction->description[j] == 3 && !(op.type[j] & T_IND))
+            return (false);
+    }
+    return (true);
+}
